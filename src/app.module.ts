@@ -18,13 +18,17 @@ import authConfig from '@/api/auth/config/auth.config';
 import redisConfig from '@/redis/config/redis.config';
 import { CacheModule } from '@/cache/cache.module';
 import { LoggerModule } from 'nestjs-pino';
+import { BullModule } from '@nestjs/bullmq';
 import loggerFactory from '@/utils/logger-factory';
+import { BackgroundModule } from './background/background.module';
+import { MailModule } from './mail/mail.module';
+import mailConfig from './mail/config/mail.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, authConfig, databaseConfig, redisConfig],
+      load: [appConfig, authConfig, databaseConfig, redisConfig, mailConfig],
       envFilePath: ['.env'],
     }),
     TypeOrmModule.forRootAsync({
@@ -68,6 +72,21 @@ import loggerFactory from '@/utils/logger-factory';
       inject: [ConfigService],
       useFactory: loggerFactory,
     }),
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService<AllConfigType>) => {
+        return {
+          connection: {
+            host: configService.getOrThrow('redis.host', { infer: true }),
+            port: configService.getOrThrow('redis.port', { infer: true }),
+            password: configService.get('redis.password', { infer: true }),
+          },
+        };
+      },
+      inject: [ConfigService],
+    }),
+    BackgroundModule,
+    MailModule,
   ],
 })
 export class AppModule {}
