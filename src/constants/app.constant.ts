@@ -18,3 +18,5 @@ export const loggingRedactPaths = [
 
 export const DEFAULT_PAGE_LIMIT = 10;
 export const DEFAULT_CURRENT_PAGE = 1;
+
+export const MAX_SIZE_IN_BYTES = 5 * 1024 * 1024;

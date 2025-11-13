@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import assert from 'assert';
 import { UserEntity } from './entities/user.entity';
-import { Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 import { UserResDto } from './dto/user.res.dto';
 import { ListUserReqDto } from './dto/list-user.req.dto';
 import { OffsetPaginatedDto } from '@/common/dto/offset-pagination/paginated.dto';
@@ -26,9 +26,17 @@ export class UserService {
   async findAll(
     reqDto: ListUserReqDto,
   ): Promise<OffsetPaginatedDto<UserResDto>> {
-    const query = this.userRepository
-      .createQueryBuilder('user')
-      .orderBy('user.createdAt', 'DESC');
+    const query = this.userRepository.createQueryBuilder('user');
+    if (reqDto.q) {
+      query.where(
+        new Brackets((qb) => {
+          qb.where('user.username ILIKE :q', { q: `%${reqDto.q}%` })
+            .orWhere('user.fullName ILIKE :q', { q: `%${reqDto.q}%` })
+            .orWhere('user.email ILIKE :q', { q: `%${reqDto.q}%` });
+        }),
+      );
+    }
+    query.orderBy('user.createdAt', 'DESC');
     const [users, metaDto] = await paginate<UserEntity>(query, reqDto, {
       skipCount: false,
       takeAll: false,

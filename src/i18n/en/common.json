@@ -4,6 +4,8 @@
   },
   "error": {
     "internal_server_error": "Has occurred an internal server error",
-    "entity_not_found": "Entity not found"
+    "entity_not_found": "Entity not found",
+    "image_max_size_exceeded": "Image size exceeds the maximum limit of 5MB",
+    "invalid_image_file_type": "Invalid image file type. Allowed types are JPEG, PNG, and GIF"
   }
 }

@@ -1,5 +1,9 @@
 {
   "validation": {
     "error": "Common validation"
+  },
+  "error": {
+    "image_max_size_exceeded": "Kích thước hình ảnh vượt quá giới hạn tối đa 5MB",
+    "invalid_image_file_type": "Loại tệp hình ảnh không hợp lệ. Các loại được phép là JPEG, PNG và GIF"
   }
 }

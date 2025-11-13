@@ -20,15 +20,25 @@ import { CacheModule } from '@/cache/cache.module';
 import { LoggerModule } from 'nestjs-pino';
 import { BullModule } from '@nestjs/bullmq';
 import loggerFactory from '@/utils/logger-factory';
-import { BackgroundModule } from './background/background.module';
-import { MailModule } from './mail/mail.module';
-import mailConfig from './mail/config/mail.config';
+import { BackgroundModule } from '@/background/background.module';
+import { MailModule } from '@/mail/mail.module';
+import mailConfig from '@/mail/config/mail.config';
+import { LibsModule } from '@/libs/libs.module';
+import cloudflareConfig from '@/libs/cloudflare/config/cloudflare.config';
+import { FilesModule } from '@/files/files.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, authConfig, databaseConfig, redisConfig, mailConfig],
+      load: [
+        appConfig,
+        authConfig,
+        databaseConfig,
+        redisConfig,
+        mailConfig,
+        cloudflareConfig,
+      ],
       envFilePath: ['.env'],
     }),
     TypeOrmModule.forRootAsync({
@@ -87,6 +97,8 @@ import mailConfig from './mail/config/mail.config';
     }),
     BackgroundModule,
     MailModule,
+    LibsModule,
+    FilesModule,
   ],
 })
 export class AppModule {}

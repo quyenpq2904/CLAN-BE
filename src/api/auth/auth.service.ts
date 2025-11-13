@@ -115,6 +115,8 @@ export class AuthService {
     const user = new UserEntity({
       email: dto.email,
       password: dto.password,
+      username: dto.username,
+      fullName: dto.fullName,
     });
 
     await user.save();

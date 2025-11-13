@@ -12,6 +12,8 @@ export type I18nTranslations = {
         "error": {
             "internal_server_error": string;
             "entity_not_found": string;
+            "image_max_size_exceeded": string;
+            "invalid_image_file_type": string;
         };
     };
     "user": {

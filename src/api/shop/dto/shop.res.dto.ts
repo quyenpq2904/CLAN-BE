@@ -4,29 +4,21 @@ import {
   StringFieldOptional,
 } from '@/decorators/field.decorators';
 import { Exclude, Expose } from 'class-transformer';
-import { UserRole, UserStatus } from '../entities/user.entity';
+import { ShopStatus } from '../entities/shop.entity';
 
 @Exclude()
-export class UserResDto {
+export class ShopResDto {
   @StringField()
   @Expose()
   id: string;
 
   @StringField()
   @Expose()
-  username: string;
+  name: string;
 
   @StringField()
   @Expose()
-  email: string;
-
-  @StringField()
-  @Expose()
-  fullName: string;
-
-  @StringFieldOptional()
-  @Expose()
-  phoneNumber?: string;
+  description: string;
 
   @StringFieldOptional()
   @Expose()
@@ -34,15 +26,11 @@ export class UserResDto {
 
   @StringFieldOptional()
   @Expose()
-  bio?: string;
+  banner?: string;
 
   @StringField()
   @Expose()
-  role: UserRole;
-
-  @StringField()
-  @Expose()
-  status: UserStatus;
+  status: ShopStatus;
 
   @ClassField(() => Date)
   @Expose()
