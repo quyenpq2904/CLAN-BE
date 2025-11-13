@@ -9,6 +9,7 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  type Relation,
 } from 'typeorm';
 
 export enum ShopStatus {
@@ -75,5 +76,5 @@ export class ShopEntity extends AbstractEntity {
     foreignKeyConstraintName: 'FK_shop_user',
   })
   @ManyToOne(() => UserEntity, (user) => user.shops)
-  user!: UserEntity;
+  user: Relation<UserEntity>;
 }

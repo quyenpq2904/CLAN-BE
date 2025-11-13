@@ -13,6 +13,7 @@ import {
 } from 'typeorm';
 import { SessionEntity } from './session.entity';
 import { ShopEntity } from '@/api/shop/entities/shop.entity';
+import { PostEntity } from '@/api/post/entities/post.entity';
 
 export enum UserStatus {
   UNVERIFIED = 'UNVERIFIED',
@@ -90,6 +91,9 @@ export class UserEntity extends AbstractEntity {
 
   @OneToMany(() => ShopEntity, (shop) => shop.user)
   shops: ShopEntity[];
+
+  @OneToMany(() => PostEntity, (post) => post.user)
+  posts: PostEntity[];
 
   @BeforeInsert()
   @BeforeUpdate()
