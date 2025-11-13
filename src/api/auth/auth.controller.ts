@@ -1,5 +1,12 @@
 import { ApiAuth, ApiPublic } from '@/decorators/http-decorators';
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { LoginResDto } from './dto/login.res.dto';
 import { LoginReqDto } from './dto/login.req.dto';
 import { RegisterReqDto } from './dto/register.req.dto';
@@ -10,6 +17,11 @@ import { CurrentUser } from '@/decorators/current-user.decorator';
 import type { JwtPayloadType } from './types/jwt-payload.type';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
+import { ForgotPasswordReqDto } from './dto/forgot-password.req.dto';
+import { ForgotPasswordResDto } from './dto/forgot-password.res.dto';
+import { ResetPasswordReqDto } from './dto/reset-password.req.dto';
+import { ResetPasswordResDto } from './dto/reset-password.res.dto';
+import { VerifyEmailResDto } from './dto/verify-email.res.dto';
 
 @ApiTags('auth')
 @Controller({
@@ -55,28 +67,38 @@ export class AuthController {
     return await this.authService.refreshToken(dto);
   }
 
-  @ApiPublic()
+  @ApiPublic({
+    type: ForgotPasswordResDto,
+    summary: 'Forgot password',
+  })
   @Post('forgot-password')
-  forgotPassword() {
-    return 'forgot-password';
+  async forgotPassword(
+    @Body() dto: ForgotPasswordReqDto,
+  ): Promise<ForgotPasswordResDto> {
+    return await this.authService.forgotPassword(dto);
   }
 
-  @ApiPublic()
-  @Post('verify/forgot-password')
-  verifyForgotPassword() {
-    return 'verify-forgot-password';
-  }
-
-  @ApiPublic()
+  @ApiPublic({
+    type: ResetPasswordResDto,
+    summary: 'Reset password',
+  })
   @Post('reset-password')
-  resetPassword() {
-    return 'reset-password';
+  async resetPassword(
+    @Body() dto: ResetPasswordReqDto,
+  ): Promise<ResetPasswordResDto> {
+    return await this.authService.resetPassword(dto);
   }
 
-  @ApiPublic()
+  @ApiPublic({
+    type: VerifyEmailResDto,
+    summary: 'Verify user email',
+  })
   @Get('verify/email')
-  verifyEmail() {
-    return 'verify-email';
+  async verifyEmail(@Query('token') token: string): Promise<VerifyEmailResDto> {
+    if (!token) {
+      throw new BadRequestException('Token is required.');
+    }
+    return await this.authService.verifyEmail(token);
   }
 
   @ApiPublic()

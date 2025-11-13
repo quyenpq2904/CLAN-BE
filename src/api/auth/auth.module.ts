@@ -5,12 +5,23 @@ import { UserModule } from '../user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from '../user/entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
+import { BullModule } from '@nestjs/bullmq';
+import { QueueName, QueuePrefix } from '@/constants/job.constant';
 
 @Module({
   imports: [
     UserModule,
     TypeOrmModule.forFeature([UserEntity]),
     JwtModule.register({}),
+    BullModule.registerQueue({
+      name: QueueName.EMAIL,
+      prefix: QueuePrefix.AUTH,
+      streams: {
+        events: {
+          maxLen: 1000,
+        },
+      },
+    }),
   ],
   controllers: [AuthController],
   providers: [AuthService],

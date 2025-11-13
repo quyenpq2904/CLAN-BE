@@ -8,4 +8,5 @@ export enum QueuePrefix {
 
 export enum JobName {
   EMAIL_VERIFICATION = 'email_verification',
+  FORGOT_PASSWORD = 'forgot_password',
 }
