@@ -16,6 +16,11 @@ export type I18nTranslations = {
             "invalid_image_file_type": string;
         };
     };
+    "shop": {
+        "error": {
+            "shop_name_exists": string;
+        };
+    };
     "user": {
         "unique": {
             "username": string;

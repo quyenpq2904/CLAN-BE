@@ -1,4 +1,5 @@
 import { AllConfigType } from '@/config/config.type';
+import { FilePrefix } from '@/constants/file-prefix.constant';
 import {
   GetObjectCommand,
   PutObjectCommand,
@@ -34,9 +35,13 @@ export class CloudflareService implements OnModuleInit {
   }
 
   // Public bucket => return full url
-  async uploadFile(file: Express.Multer.File): Promise<string> {
+  async uploadFile(
+    file: Express.Multer.File,
+    prefix: FilePrefix,
+  ): Promise<string> {
     const fileExt = path.extname(file.originalname);
     const fileName =
+      `${prefix}/` +
       file.originalname
         .replace(fileExt, '')
         .toLowerCase()

@@ -14,4 +14,6 @@ export enum ErrorCode {
 
   E100 = 'common.error.image_max_size_exceeded',
   E101 = 'common.error.invalid_image_file_type',
+
+  E200 = 'shop.error.shop_name_exists',
 }

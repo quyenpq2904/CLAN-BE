@@ -1,5 +1,6 @@
 import { MAX_SIZE_IN_BYTES } from '@/constants/app.constant';
 import { ErrorCode } from '@/constants/error-code.constant';
+import { FilePrefix } from '@/constants/file-prefix.constant';
 import { CloudflareService } from '@/libs/cloudflare/cloudflare.service';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { fileTypeFromBuffer } from 'file-type';
@@ -9,7 +10,10 @@ import sharp from 'sharp';
 export class FilesService {
   constructor(private readonly cloudflareService: CloudflareService) {}
 
-  async uploadImage(file: Express.Multer.File): Promise<string> {
+  async uploadImage(
+    file: Express.Multer.File,
+    prefix: FilePrefix,
+  ): Promise<string> {
     if (file.buffer.length > MAX_SIZE_IN_BYTES) {
       throw new BadRequestException(ErrorCode.E100);
     }
@@ -34,7 +38,7 @@ export class FilesService {
     file.mimetype = 'image/webp';
     file.size = processedBuffer.length;
 
-    return await this.cloudflareService.uploadFile(file);
+    return await this.cloudflareService.uploadFile(file, prefix);
   }
 
   async getImageUrl(fileKey: string): Promise<string> {

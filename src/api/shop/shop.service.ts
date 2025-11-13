@@ -10,6 +10,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { paginate } from '@/utils/offset-pagination';
 import { FilesService } from '@/files/filles.service';
+import { FilePrefix } from '@/constants/file-prefix.constant';
+import { ValidationException } from '@/exceptions/validation.exception';
+import { ErrorCode } from '@/constants/error-code.constant';
 
 @Injectable()
 export class ShopService {
@@ -27,11 +30,22 @@ export class ShopService {
   ): Promise<ShopResDto> {
     const { address, description, email, name, phoneNumber } = dto;
 
+    const isShopExists = await ShopEntity.exists({ where: { name } });
+    if (isShopExists) {
+      throw new ValidationException(ErrorCode.E200);
+    }
+
     if (avatarFile) {
-      dto.avatar = await this.filesService.uploadImage(avatarFile);
+      dto.avatar = await this.filesService.uploadImage(
+        avatarFile,
+        FilePrefix.SHOP_AVATAR,
+      );
     }
     if (bannerFile) {
-      dto.banner = await this.filesService.uploadImage(bannerFile);
+      dto.banner = await this.filesService.uploadImage(
+        bannerFile,
+        FilePrefix.SHOP_BANNER,
+      );
     }
 
     const shop = new ShopEntity({
