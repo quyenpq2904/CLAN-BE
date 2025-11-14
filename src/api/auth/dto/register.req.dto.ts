@@ -12,8 +12,5 @@ export class RegisterReqDto {
   password!: string;
 
   @StringField()
-  username!: string;
-
-  @StringField()
   fullName!: string;
 }

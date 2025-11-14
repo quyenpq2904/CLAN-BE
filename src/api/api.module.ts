@@ -14,9 +14,11 @@ import { ReactionModule } from './reaction/reaction.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { AttributeModule } from './attribute/attribute.module';
 import { AttributeValueModule } from './attribute-value/attribute-value.module';
+import { AddressModule } from './address/address.module';
 
 @Module({
   imports: [
+    AddressModule,
     AttributeModule,
     AttributeValueModule,
     AuthModule,
