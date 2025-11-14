@@ -25,6 +25,19 @@ export class ShopController {
 
   @ApiAuth({
     type: ShopResDto,
+    summary: 'List my shops',
+    isPaginated: true,
+  })
+  @Get('me')
+  async getMyShop(
+    @CurrentUser('id') userId: Uuid,
+    @Query() reqDto: ListMyShopReqDto,
+  ): Promise<OffsetPaginatedDto<ShopResDto>> {
+    return await this.shopService.getMyShop(userId, reqDto);
+  }
+
+  @ApiAuth({
+    type: ShopResDto,
     summary: 'Create Shop',
   })
   @Post()
@@ -48,18 +61,5 @@ export class ShopController {
     const bannerFile = files.banner?.[0];
 
     return await this.shopService.create(userId, dto, avatarFile, bannerFile);
-  }
-
-  @ApiAuth({
-    type: ShopResDto,
-    summary: 'List my shops',
-    isPaginated: true,
-  })
-  @Get('me')
-  async getMyShop(
-    @CurrentUser('id') userId: Uuid,
-    @Query() reqDto: ListMyShopReqDto,
-  ): Promise<OffsetPaginatedDto<ShopResDto>> {
-    return await this.shopService.getMyShop(userId, reqDto);
   }
 }

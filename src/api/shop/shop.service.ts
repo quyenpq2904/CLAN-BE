@@ -61,16 +61,7 @@ export class ShopService {
 
     await shop.save();
 
-    return plainToInstance(ShopResDto, {
-      id: shop.id,
-      name: shop.name,
-      description: shop.description,
-      avatar: shop.avatar,
-      banner: shop.banner,
-      status: shop.status,
-      createdAt: shop.createdAt,
-      updatedAt: shop.updatedAt,
-    });
+    return plainToInstance(ShopResDto, shop);
   }
 
   async getMyShop(

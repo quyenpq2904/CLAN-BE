@@ -1,6 +1,6 @@
-import { StringField } from '@/decorators/field.decorators';
+import { EmailField, StringField } from '@/decorators/field.decorators';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
+import { IsOptional, IsPhoneNumber } from 'class-validator';
 
 export class CreateShopReqDto {
   @StringField()
@@ -13,9 +13,10 @@ export class CreateShopReqDto {
   address: string;
 
   @StringField()
+  @IsPhoneNumber('VN')
   phoneNumber: string;
 
-  @StringField()
+  @EmailField()
   email: string;
 
   @ApiProperty({

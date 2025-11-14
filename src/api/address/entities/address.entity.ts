@@ -1,6 +1,14 @@
+import { UserEntity } from '@/api/user/entities/user.entity';
 import { type Uuid } from '@/common/types/common.type';
 import { AbstractEntity } from '@/database/entities/abstract.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  type Relation,
+} from 'typeorm';
 
 @Entity('address')
 export class AddressEntity extends AbstractEntity {
@@ -27,9 +35,17 @@ export class AddressEntity extends AbstractEntity {
   @Column({ name: 'ward_id' })
   wardId!: string;
 
-  @Column({ name: 'district_id' })
-  districtId!: string;
+  @Column({ name: 'user_id', type: 'uuid' })
+  userId!: Uuid;
 
   @Column({ name: 'is_default', default: false })
   isDefault?: boolean;
+
+  @JoinColumn({
+    name: 'user_id',
+    referencedColumnName: 'id',
+    foreignKeyConstraintName: 'FK_address_user',
+  })
+  @ManyToOne(() => UserEntity, (user) => user.addresses)
+  user: Relation<UserEntity>;
 }

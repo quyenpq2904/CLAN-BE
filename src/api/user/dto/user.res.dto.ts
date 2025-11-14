@@ -1,14 +1,18 @@
 import {
   ClassField,
+  EmailField,
   StringField,
   StringFieldOptional,
+  URLFieldOptional,
+  UUIDField,
 } from '@/decorators/field.decorators';
 import { Exclude, Expose } from 'class-transformer';
 import { UserRole, UserStatus } from '../entities/user.entity';
+import { IsPhoneNumber } from 'class-validator';
 
 @Exclude()
 export class UserResDto {
-  @StringField()
+  @UUIDField()
   @Expose()
   id: string;
 
@@ -16,7 +20,7 @@ export class UserResDto {
   @Expose()
   username: string;
 
-  @StringField()
+  @EmailField()
   @Expose()
   email: string;
 
@@ -25,10 +29,11 @@ export class UserResDto {
   fullName: string;
 
   @StringFieldOptional()
+  @IsPhoneNumber('VN')
   @Expose()
   phoneNumber?: string;
 
-  @StringFieldOptional()
+  @URLFieldOptional()
   @Expose()
   avatar?: string;
 

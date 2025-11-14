@@ -1,14 +1,15 @@
 import {
   ClassField,
   StringField,
-  StringFieldOptional,
+  URLFieldOptional,
+  UUIDField,
 } from '@/decorators/field.decorators';
 import { Exclude, Expose } from 'class-transformer';
 import { ShopStatus } from '../entities/shop.entity';
 
 @Exclude()
 export class ShopResDto {
-  @StringField()
+  @UUIDField()
   @Expose()
   id: string;
 
@@ -20,11 +21,11 @@ export class ShopResDto {
   @Expose()
   description: string;
 
-  @StringFieldOptional()
+  @URLFieldOptional()
   @Expose()
   avatar?: string;
 
-  @StringFieldOptional()
+  @URLFieldOptional()
   @Expose()
   banner?: string;
 

@@ -14,6 +14,7 @@ import {
 import { SessionEntity } from './session.entity';
 import { ShopEntity } from '@/api/shop/entities/shop.entity';
 import { PostEntity } from '@/api/post/entities/post.entity';
+import { AddressEntity } from '@/api/address/entities/address.entity';
 
 export enum UserStatus {
   UNVERIFIED = 'UNVERIFIED',
@@ -94,6 +95,9 @@ export class UserEntity extends AbstractEntity {
 
   @OneToMany(() => PostEntity, (post) => post.user)
   posts: PostEntity[];
+
+  @OneToMany(() => AddressEntity, (address) => address.user)
+  addresses: AddressEntity[];
 
   @BeforeInsert()
   @BeforeUpdate()

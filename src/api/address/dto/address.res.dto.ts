@@ -1,11 +1,16 @@
-import { BooleanField, StringField } from '@/decorators/field.decorators';
+import {
+  BooleanField,
+  StringField,
+  UUIDField,
+} from '@/decorators/field.decorators';
 import { Exclude, Expose } from 'class-transformer';
 
 @Exclude()
 export class AddressResDto {
-  @StringField()
+  @UUIDField()
   @Expose()
   id: string;
+
   @StringField()
   @Expose()
   receiverName: string;
