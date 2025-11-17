@@ -16,6 +16,8 @@ import {
 import { STATUS_CODES } from 'http';
 import { ApiPaginatedResponse } from './swagger.decorators';
 import { Public } from './public.decorartor';
+import { UserRole } from '@/api/user/entities/user.entity';
+import { Roles } from './roles.decorator';
 
 type ApiResponseType = number;
 type ApiAuthType = 'basic' | 'jwt';
@@ -35,6 +37,7 @@ type IApiPublicOptions = IApiOptions<Type<any>>;
 
 interface IApiAuthOptions extends IApiOptions<Type<any>> {
   auths?: ApiAuthType[];
+  roles?: UserRole[];
 }
 
 export const ApiPublic = (options: IApiPublicOptions = {}): MethodDecorator => {
@@ -88,6 +91,7 @@ export const ApiAuth = (options: IApiAuthOptions = {}): MethodDecorator => {
     paginationType: options.paginationType || 'offset',
   };
   const auths = options.auths || ['jwt'];
+  const roles = options.roles;
 
   const errorResponses = (options.errorResponses || defaultErrorResponses)?.map(
     (statusCode) =>
@@ -107,7 +111,7 @@ export const ApiAuth = (options: IApiAuthOptions = {}): MethodDecorator => {
     }
   });
 
-  return applyDecorators(
+  const decoratorsToApply = [
     ApiOperation({ summary: options?.summary }),
     HttpCode(options.statusCode || defaultStatusCode),
     isPaginated
@@ -117,5 +121,11 @@ export const ApiAuth = (options: IApiAuthOptions = {}): MethodDecorator => {
         : ApiOkResponse(ok),
     ...authDecorators,
     ...errorResponses,
-  );
+  ];
+
+  if (roles && roles.length > 0) {
+    decoratorsToApply.push(Roles(roles));
+  }
+
+  return applyDecorators(...decoratorsToApply);
 };

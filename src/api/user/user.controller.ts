@@ -6,6 +6,7 @@ import { UserResDto } from './dto/user.res.dto';
 import { ListUserReqDto } from './dto/list-user.req.dto';
 import { OffsetPaginatedDto } from '@/common/dto/offset-pagination/paginated.dto';
 import { ApiAuth } from '@/decorators/http-decorators';
+import { CurrentUser } from '@/decorators/current-user.decorator';
 
 @ApiTags('users')
 @Controller({ path: 'users', version: '1' })
@@ -17,7 +18,7 @@ export class UserController {
     type: UserResDto,
     summary: 'Get current user',
   })
-  async getCurrentUser(userId: Uuid): Promise<UserResDto> {
+  async getCurrentUser(@CurrentUser('id') userId: Uuid): Promise<UserResDto> {
     return await this.userService.findOne(userId);
   }
 

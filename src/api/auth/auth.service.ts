@@ -3,7 +3,7 @@ import { AllConfigType } from '@/config/config.type';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '../user/entities/user.entity';
+import { UserEntity, UserRole } from '../user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { LoginReqDto } from './dto/login.req.dto';
@@ -70,7 +70,7 @@ export class AuthService {
     const { email, password } = dto;
     const user = await this.userRepository.findOne({
       where: { email },
-      select: ['id', 'email', 'password'],
+      select: ['id', 'email', 'password', 'role'],
     });
 
     const isPasswordValid =
@@ -94,6 +94,7 @@ export class AuthService {
     const token = await this.createToken({
       id: user.id,
       sessionId: session.id,
+      role: user.role,
       hash,
     });
 
@@ -165,7 +166,7 @@ export class AuthService {
 
     const user = await this.userRepository.findOneOrFail({
       where: { id: session.userId },
-      select: ['id'],
+      select: ['id', 'role'],
     });
 
     const newHash = crypto
@@ -178,6 +179,7 @@ export class AuthService {
     return await this.createToken({
       id: user.id,
       sessionId: session.id,
+      role: user.role,
       hash: newHash,
     });
   }
@@ -259,6 +261,7 @@ export class AuthService {
 
   private async createToken(data: {
     id: string;
+    role: UserRole;
     sessionId: string;
     hash: string;
   }): Promise<Token> {
@@ -266,7 +269,7 @@ export class AuthService {
       this.jwtService.signAsync(
         {
           id: data.id,
-          role: '',
+          role: data.role,
           sessionId: data.sessionId,
         },
         {

@@ -1,6 +1,13 @@
+import { AttributeEntity } from '@/api/attribute/entities/attribute.entity';
 import { type Uuid } from '@/common/types/common.type';
 import { AbstractEntity } from '@/database/entities/abstract.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('category')
 export class CategoryEntity extends AbstractEntity {
@@ -20,6 +27,20 @@ export class CategoryEntity extends AbstractEntity {
   @Column()
   slug!: string;
 
-  @Column({ default: '' })
-  description?: string;
+  @Column({ default: true, name: 'is_enabled' })
+  isEnabled?: boolean;
+
+  @ManyToMany(() => AttributeEntity, (attribute) => attribute.categories)
+  @JoinTable({
+    name: 'category_attribute',
+    joinColumn: {
+      name: 'category_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'attribute_id',
+      referencedColumnName: 'id',
+    },
+  })
+  attributes: AttributeEntity[];
 }

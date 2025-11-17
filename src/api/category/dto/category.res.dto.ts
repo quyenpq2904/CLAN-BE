@@ -7,38 +7,22 @@ import {
 import { Exclude, Expose } from 'class-transformer';
 
 @Exclude()
-export class AddressResDto {
+export class CategoryResDto {
   @UUIDField()
   @Expose()
   id: string;
 
   @StringField()
   @Expose()
-  receiverName: string;
+  name: string;
 
   @StringField()
   @Expose()
-  phoneNumber: string;
-
-  @StringField()
-  @Expose()
-  address: string;
-
-  @StringField()
-  @Expose()
-  provinceId: string;
-
-  @StringField()
-  @Expose()
-  wardId: string;
-
-  @StringField()
-  @Expose()
-  districtId: string;
+  slug: string;
 
   @BooleanField()
   @Expose()
-  isDefault: boolean;
+  isEnabled: boolean;
 
   @ClassField(() => Date)
   @Expose()

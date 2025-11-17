@@ -5,6 +5,19 @@
 import { Path } from "nestjs-i18n";
 /* prettier-ignore */
 export type I18nTranslations = {
+    "attribute": {
+        "error": {
+            "name_exists": string;
+            "not_found": string;
+        };
+    };
+    "category": {
+        "error": {
+            "name_exists": string;
+            "slug_exists": string;
+            "not_found": string;
+        };
+    };
     "common": {
         "validation": {
             "error": string;

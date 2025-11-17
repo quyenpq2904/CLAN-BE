@@ -1,0 +1,6 @@
+{
+  "error": {
+    "name_exists": "Tên thuộc tính đã tồn tại",
+    "not_found": "Không tìm thấy thuộc tính"
+  }
+}

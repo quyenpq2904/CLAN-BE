@@ -1,0 +1,7 @@
+{
+  "error": {
+    "name_exists": "Category name already exists",
+    "slug_exists": "Category slug already exists",
+    "not_found": "Category not found"
+  }
+}

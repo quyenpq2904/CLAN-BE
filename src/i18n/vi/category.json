@@ -1,0 +1,7 @@
+{
+  "error": {
+    "name_exists": "Tên danh mục đã tồn tại",
+    "slug_exists": "Slug danh mục đã tồn tại",
+    "not_found": "Không tìm thấy danh mục"
+  }
+}

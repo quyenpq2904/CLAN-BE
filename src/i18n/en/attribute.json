@@ -1,0 +1,6 @@
+{
+  "error": {
+    "name_exists": "Attribute name already exists",
+    "not_found": "Attribute not found"
+  }
+}
