@@ -34,7 +34,9 @@ export class AttributeService {
   }
 
   async findAll(reqDto: ListAttributeReqDto): Promise<AttributeResDto[]> {
-    const query = this.attributeRepository.createQueryBuilder('attribute');
+    const query = this.attributeRepository
+      .createQueryBuilder('attribute')
+      .where('attribute.isEnabled = :isEnabled', { isEnabled: true });
 
     if (reqDto.q) {
       query.andWhere('attribute.name ILIKE :q', { q: `%${reqDto.q}%` });
@@ -54,7 +56,7 @@ export class AttributeService {
 
   async findOne(id: Uuid): Promise<AttributeResDto> {
     const attribute = await this.attributeRepository.findOne({
-      where: { id },
+      where: { id, isEnabled: true },
       relations: ['attributeValues'], // Load cả các values
     });
 

@@ -54,7 +54,8 @@ export class AttributeValueService {
     // Bắt buộc phải có attributeId
     const query = this.attributeValueRepository
       .createQueryBuilder('attributeValue')
-      .where('attributeValue.attributeId = :attributeId', { attributeId });
+      .where('attributeValue.attributeId = :attributeId', { attributeId })
+      .andWhere('attributeValue.isEnabled = :isEnabled', { isEnabled: true });
 
     if (q) {
       query.andWhere('attributeValue.value ILIKE :q', { q: `%${q}%` });
@@ -71,7 +72,7 @@ export class AttributeValueService {
 
   async findOne(id: Uuid): Promise<AttributeValueResDto> {
     const attributeValue = await this.attributeValueRepository.findOne({
-      where: { id },
+      where: { id, isEnabled: true },
     });
 
     if (!attributeValue) {

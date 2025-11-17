@@ -46,8 +46,9 @@ export class CategoryService {
   }
 
   async findAll(reqDto: ListCategoryReqDto): Promise<CategoryResDto[]> {
-    const query = this.categoryRepository.createQueryBuilder('category');
-    // .where('category.isEnabled = :isEnabled', { isEnabled: true });
+    const query = this.categoryRepository
+      .createQueryBuilder('category')
+      .where('category.isEnabled = :isEnabled', { isEnabled: true });
 
     if (reqDto.q) {
       query.andWhere('category.name ILIKE :q', { q: `%${reqDto.q}%` });
@@ -60,7 +61,9 @@ export class CategoryService {
   }
 
   async findOne(id: Uuid): Promise<CategoryResDto> {
-    const category = await this.categoryRepository.findOne({ where: { id } });
+    const category = await this.categoryRepository.findOne({
+      where: { id, isEnabled: true },
+    });
 
     if (!category) {
       throw new NotFoundException(ErrorCode.E303);

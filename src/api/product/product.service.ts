@@ -105,7 +105,8 @@ export class ProductService {
       .createQueryBuilder('product')
       .leftJoinAndSelect('product.variants', 'variants')
       .leftJoinAndSelect('product.categories', 'category')
-      .leftJoinAndSelect('product.shop', 'shop');
+      .innerJoinAndSelect('product.shop', 'shop')
+      .where('product.status = :status', { status: ProductStatus.ACTIVE });
 
     if (reqDto.q) {
       query.andWhere('product.name ILIKE :q', { q: `%${reqDto.q}%` });

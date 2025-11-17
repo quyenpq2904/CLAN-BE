@@ -71,6 +71,7 @@ export class ShopService {
     const query = this.shopRepository
       .createQueryBuilder('shop')
       .where('shop.userId = :userId', { userId });
+
     if (reqDto.q) {
       query.andWhere('shop.name ILIKE :q', { q: `%${reqDto.q}%` });
     }
