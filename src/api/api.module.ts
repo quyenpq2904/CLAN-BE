@@ -9,7 +9,6 @@ import { CommissionModule } from './commission/commission.module';
 import { OutfitModule } from './outfit/outfit.module';
 import { PostModule } from './post/post.module';
 import { ProductModule } from './product/product.module';
-import { ProductVariantModule } from './product-variant/product-variant.module';
 import { ReactionModule } from './reaction/reaction.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { AttributeModule } from './attribute/attribute.module';
@@ -29,7 +28,6 @@ import { AddressModule } from './address/address.module';
     OutfitModule,
     PostModule,
     ProductModule,
-    ProductVariantModule,
     ReactionModule,
     ShopModule,
     SubscriptionModule,

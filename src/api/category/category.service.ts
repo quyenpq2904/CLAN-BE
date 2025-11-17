@@ -10,6 +10,8 @@ import { ListCategoryReqDto } from './dto/list-category.req.dto';
 import { Uuid } from '@/common/types/common.type';
 import { UpdateCategoryReqDto } from './dto/update-category.req.dto';
 import { ErrorCode } from '@/constants/error-code.constant';
+import { AttributeResDto } from '../attribute/dto/attribute.res.dto';
+import slugify from 'slugify';
 
 @Injectable()
 export class CategoryService {
@@ -17,18 +19,6 @@ export class CategoryService {
     @InjectRepository(CategoryEntity)
     private readonly categoryRepository: Repository<CategoryEntity>,
   ) {}
-
-  private generateSlug(name: string): string {
-    return name
-      .toLowerCase()
-      .trim()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/đ/g, 'd')
-      .replace(/[^\w\s-]/g, '')
-      .replace(/[\s_-]+/g, '-')
-      .replace(/^-+|-+$/g, '');
-  }
 
   async create(dto: CreateCategoryReqDto): Promise<CategoryResDto> {
     const { name } = dto;
@@ -38,7 +28,7 @@ export class CategoryService {
       throw new ValidationException(ErrorCode.E301);
     }
 
-    const slug = this.generateSlug(name);
+    const slug = slugify(name, { lower: true, strict: true });
 
     const isSlugExists = await CategoryEntity.exists({ where: { slug } });
     if (isSlugExists) {
@@ -79,6 +69,36 @@ export class CategoryService {
     return plainToInstance(CategoryResDto, category);
   }
 
+  async getAttributes(id: Uuid): Promise<AttributeResDto[]> {
+    // Kiểm tra category có tồn tại không
+    const categoryExists = await this.categoryRepository.exists({
+      where: { id },
+    });
+    if (!categoryExists) {
+      throw new NotFoundException(ErrorCode.E303);
+    }
+
+    // Query lấy category kèm theo attributes và values của nó
+    const category = await this.categoryRepository.findOne({
+      where: { id },
+      relations: {
+        attributes: {
+          attributeValues: true,
+        },
+      },
+      order: {
+        attributes: {
+          createdAt: 'ASC',
+          attributeValues: {
+            displayOrder: 'ASC',
+          },
+        },
+      },
+    });
+
+    return plainToInstance(AttributeResDto, category?.attributes || []);
+  }
+
   async update(id: Uuid, dto: UpdateCategoryReqDto): Promise<CategoryResDto> {
     const category = await this.categoryRepository.findOne({ where: { id } });
     if (!category) {
@@ -92,7 +112,7 @@ export class CategoryService {
       if (isNameExists) {
         throw new ValidationException(ErrorCode.E301);
       }
-      category.slug = this.generateSlug(dto.name);
+      category.slug = slugify(dto.name, { lower: true, strict: true });
     }
 
     Object.assign(category, dto);

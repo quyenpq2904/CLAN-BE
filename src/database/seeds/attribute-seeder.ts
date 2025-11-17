@@ -16,7 +16,7 @@ export const ATTRIBUTE_IDS = {
   XUAT_XU: 'a1a1b1b1-7777-4a4a-aaaa-777777777777',
 };
 
-export class AttributeSeeder1763316856114 implements Seeder {
+export class AttributeSeeder implements Seeder {
   track = false;
 
   public async run(dataSource: DataSource): Promise<any> {

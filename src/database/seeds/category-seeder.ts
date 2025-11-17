@@ -1,5 +1,6 @@
 import { CategoryEntity } from '@/api/category/entities/category.entity';
 import { type Uuid } from '@/common/types/common.type';
+import slugify from 'slugify';
 import { DataSource, In } from 'typeorm';
 import { Seeder } from 'typeorm-extension';
 
@@ -20,7 +21,7 @@ export const CATEGORY_IDS = {
   KINH_MAT: 'd8a8f8a0-f8f8-4f8a-8f8a-8f8a8f8a8f97',
 };
 
-export class CategorySeeder1763316483295 implements Seeder {
+export class CategorySeeder implements Seeder {
   track = false;
 
   public async run(dataSource: DataSource): Promise<any> {
@@ -58,7 +59,7 @@ export class CategorySeeder1763316483295 implements Seeder {
           new CategoryEntity({
             id: data.id as Uuid,
             name: data.name,
-            slug: this.generateSlug(data.name),
+            slug: slugify(data.name, { lower: true, strict: true }),
             isEnabled: true,
           }),
         );
@@ -72,17 +73,5 @@ export class CategorySeeder1763316483295 implements Seeder {
     } else {
       console.log('🌱 All categories already exist. Nothing to seed.');
     }
-  }
-
-  private generateSlug(name: string): string {
-    return name
-      .toLowerCase()
-      .trim()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[đĐ]/g, 'd')
-      .replace(/[^\w\s-]/g, '')
-      .replace(/[\s_-]+/g, '-')
-      .replace(/^-+|-+$/g, '');
   }
 }

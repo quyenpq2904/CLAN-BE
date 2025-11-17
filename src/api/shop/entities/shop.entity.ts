@@ -1,3 +1,4 @@
+import { ProductEntity } from '@/api/product/entities/product.entity';
 import { UserEntity } from '@/api/user/entities/user.entity';
 import { type Uuid } from '@/common/types/common.type';
 import { AbstractEntity } from '@/database/entities/abstract.entity';
@@ -8,6 +9,7 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   type Relation,
 } from 'typeorm';
@@ -77,4 +79,7 @@ export class ShopEntity extends AbstractEntity {
   })
   @ManyToOne(() => UserEntity, (user) => user.shops)
   user: Relation<UserEntity>;
+
+  @OneToMany(() => ProductEntity, (product) => product.shop)
+  products: ProductEntity[];
 }

@@ -16,6 +16,7 @@ export enum ErrorCode {
   E101 = 'common.error.invalid_image_file_type',
 
   E200 = 'shop.error.shop_name_exists',
+  E201 = 'shop.error.not_found',
 
   E301 = 'category.error.name_exists',
   E302 = 'category.error.slug_exists',
@@ -25,4 +26,9 @@ export enum ErrorCode {
   E401 = 'attribute.error.not_found',
   E450 = 'attribute.value.error.exists',
   E451 = 'attribute.value.error.not_found',
+
+  E500 = 'product.error.name_exists',
+  E501 = 'product.error.not_found',
+  E550 = 'product.variant.error.exists',
+  E551 = 'product.variant.error.not_found',
 }

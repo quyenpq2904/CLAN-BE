@@ -22,6 +22,7 @@ import { UpdateCategoryReqDto } from './dto/update-category.req.dto';
 import { CurrentUser } from '@/decorators/current-user.decorator';
 import { type JwtPayloadType } from '../auth/types/jwt-payload.type';
 import { UserRole } from '../user/entities/user.entity';
+import { AttributeResDto } from '../attribute/dto/attribute.res.dto';
 
 @ApiTags('categories')
 @Controller('categories')
@@ -45,7 +46,7 @@ export class CategoryController {
     return await this.categoryService.create(dto);
   }
 
-  @ApiAuth({
+  @ApiPublic({
     type: CategoryResDto,
     summary: 'List categories',
   })
@@ -63,6 +64,15 @@ export class CategoryController {
   @Get(':id')
   async findOne(@Param('id') id: Uuid): Promise<CategoryResDto> {
     return await this.categoryService.findOne(id);
+  }
+
+  @ApiPublic({
+    type: AttributeResDto,
+    summary: 'Get all attributes of a specific category',
+  })
+  @Get(':id/attributes')
+  async getAttributes(@Param('id') id: Uuid): Promise<AttributeResDto[]> {
+    return await this.categoryService.getAttributes(id);
   }
 
   @ApiAuth({

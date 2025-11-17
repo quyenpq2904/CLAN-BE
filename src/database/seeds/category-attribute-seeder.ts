@@ -1,15 +1,15 @@
 import { type Uuid } from '@/common/types/common.type';
 import { DataSource } from 'typeorm';
 import { Seeder } from 'typeorm-extension';
-import { ATTRIBUTE_IDS } from './1763316856114-attribute-seeder';
-import { CATEGORY_IDS } from './1763316483295-category-seeder';
+import { ATTRIBUTE_IDS } from './attribute-seeder';
+import { CATEGORY_IDS } from './category-seeder';
 
 type RelationPair = {
   category_id: Uuid;
   attribute_id: Uuid;
 };
 
-export class CategoryAttributeSeeder1763319016426 implements Seeder {
+export class CategoryAttributeSeeder implements Seeder {
   track = false;
 
   public async run(dataSource: DataSource): Promise<any> {

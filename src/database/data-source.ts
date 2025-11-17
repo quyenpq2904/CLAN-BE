@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import 'tsconfig-paths/register';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { SeederOptions } from 'typeorm-extension';
+import MainSeeder from './seeds/main-seeder';
 
 const AppDataSource = new DataSource({
   type: process.env.DATABASE_TYPE,
@@ -18,7 +19,7 @@ const AppDataSource = new DataSource({
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
   migrationsTableName: 'migrations',
-  seeds: [__dirname + '/seeds/main.seeder{.ts,.js}'],
+  seeds: [MainSeeder],
 } as DataSourceOptions & SeederOptions);
 
 export default AppDataSource;
