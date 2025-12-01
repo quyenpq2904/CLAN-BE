@@ -1,53 +1,21 @@
-name: Continuous Deployment
+services:
+  clan:
+    container_name: clan-be
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./src:/app/src
+    command: pnpm start:dev
+    networks:
+      - clan-network
 
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  docker-compose:
-    runs-on: self-hosted
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Create env file
-        run: |
-          echo "APP_NAME=${{ secrets.APP_NAME }}" >> .env
-          echo "APP_URL=${{ secrets.APP_URL }}" >> .env
-          echo "APP_PORT=${{ secrets.APP_PORT }}" >> .env
-          echo "API_PREFIX=${{ secrets.API_PREFIX }}" >> .env
-          echo "APP_FALLBACK_LANGUAGE=${{ secrets.APP_FALLBACK_LANGUAGE }}" >> .env
-          echo "AUTH_JWT_SECRET=${{ secrets.AUTH_JWT_SECRET }}" >> .env
-          echo "AUTH_JWT_TOKEN_EXPIRES_IN=${{ secrets.AUTH_JWT_TOKEN_EXPIRES_IN }}" >> .env
-          echo "AUTH_REFRESH_SECRET=${{ secrets.AUTH_REFRESH_SECRET }}" >> .env
-          echo "AUTH_REFRESH_TOKEN_EXPIRES_IN=${{ secrets.AUTH_REFRESH_TOKEN_EXPIRES_IN }}" >> .env
-          echo "AUTH_FORGOT_SECRET=${{ secrets.AUTH_FORGOT_SECRET }}" >> .env
-          echo "AUTH_FORGOT_TOKEN_EXPIRES_IN=${{ secrets.AUTH_FORGOT_TOKEN_EXPIRES_IN }}" >> .env
-          echo "AUTH_CONFIRM_EMAIL_SECRET=${{ secrets.AUTH_CONFIRM_EMAIL_SECRET }}" >> .env
-          echo "AUTH_CONFIRM_EMAIL_TOKEN_EXPIRES_IN=${{ secrets.AUTH_CONFIRM_EMAIL_TOKEN_EXPIRES_IN }}" >> .env
-          echo "DATABASE_TYPE=${{ secrets.DATABASE_TYPE }}" >> .env
-          echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" >> .env
-          echo "DATABASE_PORT=${{ secrets.DATABASE_PORT }}" >> .env
-          echo "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}" >> .env
-          echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> .env
-          echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> .env
-          echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
-          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
-          echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
-          echo "MAIL_HOST=${{ secrets.MAIL_HOST }}" >> .env
-          echo "MAIL_PORT=${{ secrets.MAIL_PORT }}" >> .env
-          echo "MAIL_USER=${{ secrets.MAIL_USER }}" >> .env
-          echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> .env
-          echo "MAIL_DEFAULT_NAME=${{ secrets.MAIL_DEFAULT_NAME }}" >> .env
-          echo "MAIL_DEFAULT_EMAIL=${{ secrets.MAIL_DEFAULT_EMAIL }}" >> .env
-          echo "CLOUDFLARE_R2_ACCOUNT_ID=${{ secrets.CLOUDFLARE_R2_ACCOUNT_ID }}" >> .env
-          echo "CLOUDFLARE_R2_BUCKET_NAME=${{ secrets.CLOUDFLARE_R2_BUCKET_NAME }}" >> .env
-          echo "CLOUDFLARE_R2_PUBLIC_BUCKET_URL=${{ secrets.CLOUDFLARE_R2_PUBLIC_BUCKET_URL }}" >> .env
-          echo "CLOUDFLARE_R2_TOKEN_VALUE=${{ secrets.CLOUDFLARE_R2_TOKEN_VALUE }}" >> .env
-          echo "CLOUDFLARE_R2_ACCESS_KEY_ID=${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}" >> .env
-          echo "CLOUDFLARE_R2_SECRET_ACCESS_KEY=${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}" >> .env
-
-      - name: Run compose up container
-        run: docker compose -f docker-compose.yaml up --build -d
+networks:
+  clan-network:
+    driver: bridge
