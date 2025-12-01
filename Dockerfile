@@ -19,8 +19,6 @@ RUN pnpm install
 # Bundle app source
 COPY --chown=node:node . .
 
-RUN npx prisma generate
-
 # Use the node user from the image (non-root)
 USER node
 
@@ -36,7 +34,6 @@ COPY --chown=node:node --from=development /app/src ./src
 COPY --chown=node:node --from=development /app/tsconfig.json ./tsconfig.json
 COPY --chown=node:node --from=development /app/tsconfig.build.json ./tsconfig.build.json
 COPY --chown=node:node --from=development /app/nest-cli.json ./nest-cli.json
-COPY --chown=node:node --from=development /app/prisma.config.ts ./prisma.config.ts
 
 RUN pnpm build
 
